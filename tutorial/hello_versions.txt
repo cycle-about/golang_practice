@@ -1,0 +1,155 @@
+// https://go.dev/doc/tutorial/getting-started
+
+package main
+
+import "fmt"
+
+func main() {
+    fmt.Println("Hello, World!")
+}
+
+----------------------
+
+// https://go.dev/doc/tutorial/getting-started
+
+package main
+
+import "fmt"
+
+// https://pkg.go.dev/rsc.io/quote
+import "rsc.io/quote"
+
+func main() {
+    // fmt.Println(quote.Go())
+    // fmt.Println(quote.Glass())
+    // fmt.Println(quote.Hello())
+    fmt.Println(quote.Opt())
+}
+
+----------------------
+
+// https://go.dev/doc/tutorial/call-module-code
+// pair_1
+
+package main
+
+import (
+    "fmt"
+
+    "example.com/greetings"
+)
+
+func main() {
+    // Get a greeting message and print it.
+    message := greetings.Hello("Gladys")
+    fmt.Println(message)
+}
+
+----------------------
+
+// https://go.dev/doc/tutorial/handle-errors
+// pair_2
+
+// log variable automatically available when package added
+// return values from Hello() now check for error, which can be nil
+
+package main
+
+import (
+    "fmt"
+    "log"
+
+    "example.com/greetings"
+)
+
+func main() {
+    // Set properties of the predefined Logger, including
+    // the log entry prefix and a flag to disable printing
+    // the time, source file, and line number.
+    log.SetPrefix("greetings: ")
+    log.SetFlags(0)
+
+    // Request a greeting message.
+    message, err := greetings.Hello("")
+    // If an error was returned, print it to the console and
+    // exit the program.
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    // If no error was returned, print the returned message
+    // to the console.
+    fmt.Println(message)
+}
+
+----------------------
+
+// https://go.dev/doc/tutorial/random-greeting
+// pair_3
+
+// passes a name to function Hello() so it does not return error as in pair_2
+
+package main
+
+import (
+    "fmt"
+    "log"
+
+    "example.com/greetings"
+)
+
+func main() {
+    // Set properties of the predefined Logger, including
+    // the log entry prefix and a flag to disable printing
+    // the time, source file, and line number.
+    log.SetPrefix("greetings: ")
+    log.SetFlags(0)
+
+    // Request a greeting message.
+    message, err := greetings.Hello("Gladys")
+    // If an error was returned, print it to the console and
+    // exit the program.
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    // If no error was returned, print the returned message
+    // to the console.
+    fmt.Println(message)
+}
+
+----------------------
+
+// https://go.dev/doc/tutorial/greetings-multiple-people
+// pair_4
+
+// calls method that accepts a slice of names
+
+package main
+
+import (
+    "fmt"
+    "log"
+
+    "example.com/greetings"
+)
+
+func main() {
+    // Set properties of the predefined Logger, including
+    // the log entry prefix and a flag to disable printing
+    // the time, source file, and line number.
+    log.SetPrefix("greetings: ")
+    log.SetFlags(0)
+
+    // A slice of names.
+    names := []string{"Gladys", "Samantha", "Darrin"}
+
+    // Request greeting messages for the names.
+    messages, err := greetings.Hellos(names)
+    if err != nil {
+        log.Fatal(err)
+    }
+    // If no error was returned, print the returned map of
+    // messages to the console.
+    fmt.Println(messages)
+}

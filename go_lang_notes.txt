@@ -1,0 +1,120 @@
+Tutorials
+
+Resume Tutorials https://go.dev/doc/tutorial/getting-started
+	/ 1. Getting started
+	/ 2. Create a Go module
+		/ a. Create a module
+		/ b. Call code from another module
+		/ c. Return and handle an error
+		/ d. Return a random greeting
+		/ e. Return greetings for multiple people
+		f. Add a test
+		g. Compile and install the application
+	3. Getting started with multi-module workspaces
+	4. Accessing a relational database
+	5. Developing a RESTful API with Go and Gin
+	6. Getting started with generics
+	7. Getting started with fuzzing
+	8. Gettins started with govulncheck
+	9. Find and fix vulnerabile dependencies with VS Code Go
+	10. A tour of Go
+
+
+=====================================
+
+2/11/25
+
+Read all code in the prior versions, and ask any questions in chatgpt, save answers
+The name of the testing file, ending with '_test', flags it to be executed with command 'go test'
+Try changing 'greetings_test.go' to 'thing_test.go' and run 'go test'
+	-> still executes
+
+https://go.dev/doc/tutorial/compile-install
+	Works, prints out names same as 'go run .'
+		$ go build
+		$ ./hello
+	'go install' means the executable can be run without specifying its path
+	Get the install path of binaries
+		$ go list -f '{{.Target}}'
+			/home/laura/go/bin/hello
+
+Install steps to not result in being able to execute 'hello' from another dir
+	This left the terminal session not finding the go binary at all (showing prompt to install go with apt)
+		$ export PATH=/home/laura/go/bin/hello
+	I think my error was leaving on the 'hello' at the end, should be /home/laura/go/bin/
+
+	Variations of second option also not working, with or without final dir
+		$ go list -f '{{.Target}}'
+			/home/laura/go/bin/hello
+		$ go env -w GOBIN=/home/laura/go/bin/hello
+		$ go install
+			example/hello: go install example/hello: mkdir /home/laura/go/bin/hello/: file exists
+		$ cd ../
+		tutorial $ hello
+			Command 'hello' not found, but can be installed with:
+			sudo snap install hello              # version 2.10, or
+			sudo apt  install hello              # version 2.10-3
+			sudo apt  install hello-traditional  # version 2.10-6
+			See 'snap info hello' for additional versions.
+		tutorial $ go env -w GOBIN=/home/laura/go/bin/
+		tutorial $ cd hello/
+		$ go install
+		$ hello
+			Command 'hello' not found, but can be installed with:
+			sudo snap install hello              # version 2.10, or
+			sudo apt  install hello              # version 2.10-3
+			sudo apt  install hello-traditional  # version 2.10-6
+			See 'snap info hello' for additional versions.
+
+Check into: will the install step not over-write an existing 'hello'?
+
+
+-----------------------------------
+
+2/9/25
+
+Redo Go install after OS reinstall - https://go.dev/doc/install
+	Got go1.23.6.linux-amd64.tar.gz - https://go.dev/dl
+	Added this to $HOME/.profile, and ran in terminal to apply now
+		export PATH=$PATH:/usr/local/go/bin
+	$ go version
+		-> go version go1.23.6 linux/amd64
+
+Check that 'Getting started' program still works
+	$ go run .
+		 -> go: downloading rsc.io/quote v1.5.2
+			go: downloading rsc.io/sampler v1.3.0
+			go: downloading golang.org/x/text v0.0.0-20170915032832-14c0d48ead0c
+			Don't communicate by sharing memory, share memory by communicating.
+
+Next tutorial: Create a module - https://go.dev/doc/tutorial/create-module
+	Finding: seems there can only be one file in a module dir that declares main
+	I tried leaving 'hello_v1.go' in the same dir, but then calling 'go run .' throws this error
+		# example/hello
+		./hello_v1.go:13:6: main redeclared in this block
+		./hello.go:9:6: other declaration of main
+	Rename hello_v1.go to hello_v1.txt: then the run works
+	Note: shows returning multiple values from a function, eg (string, error) - https://go.dev/doc/tutorial/handle-errors
+	Error handling: https://go.dev/doc/tutorial/handle-errors
+
+-----------------------------------
+
+1/27/25
+
+Download and install - https://go.dev/dl - got go1.23.5.linux-amd64.tar.gz
+
+	$ sudo tar -C /usr/local -xzf go1.23.5.linux-amd64.tar.gz
+	$ vi $HOME/.profile 
+	$ export PATH=$PATH:/usr/local/go/bin
+	$ go version
+		-> go version go1.23.5 linux/amd64
+
+Getting Started - https://go.dev/doc/tutorial/getting-started
+	Module: tracks the dependencies from other modules that it uses
+	Package repository - https://pkg.go.dev/
+	Needed to 'get' the module, in addition to import it in the file [I tried to run it before executing the next step that handled it]
+	-> hello.go:11:8: no required module provides package rsc.io/quote; to add it: go get rsc.io/quote
+	Works after executing that
+	Odd the tutorial said to use 'go mod tidy'
+	'go help mod tidy' answer: Tidy makes sure go.mod matches the source code in the module. It adds any missing modules necessary to build the current module's packages and dependencies,
+	
