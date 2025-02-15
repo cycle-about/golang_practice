@@ -1,15 +1,15 @@
 Tutorials
 
 Resume Tutorials https://go.dev/doc/tutorial/getting-started
-	/ 1. Getting started
-	/ 2. Create a Go module
+	/ 1. Getting started - 1/27/25
+	/ 2. Create a Go module - finished 2/15/25
 		/ a. Create a module
 		/ b. Call code from another module
 		/ c. Return and handle an error
 		/ d. Return a random greeting
 		/ e. Return greetings for multiple people
-		f. Add a test
-		g. Compile and install the application
+		/ f. Add a test
+		/ g. Compile and install the application
 	3. Getting started with multi-module workspaces
 	4. Accessing a relational database
 	5. Developing a RESTful API with Go and Gin
@@ -21,6 +21,130 @@ Resume Tutorials https://go.dev/doc/tutorial/getting-started
 
 
 =====================================
+
+
+2/15/25
+
+Resume executable install tutorial, https://go.dev/doc/tutorial/compile-install
+Repeat the commands in tutorial
+	// in /home/laura/Documents/CS_Study/Go_Lang/tutorial/hello
+	$ go build
+		// this remakes 'hello' binary in working dir. 'You've compiled the app into an executable so you can run it. But to run it currently, your propmpt needs either to be in the exe's dir or specify the exe's path. Next install exe so you can run it without specifying path.' Installing it seems to mean adding it to Go's location
+	$ ./hello 
+		map[Darrin:Hi, Darrin. Welcome! Gladys:Hi, Gladys. Welcome! Samantha:Hi, Samantha. Welcome!]
+	$ go list -f '{{.Target}}'
+		/home/laura/go/bin/hello
+		// this is the install path, where the go command will install the current package
+	$ ll /home/laura/go/bin/hello
+		-rwxrwxr-x 1 laura laura 2265855 Feb 11 20:29 /home/laura/go/bin/hello*
+	$ file /home/laura/go/bin/hello
+		/home/laura/go/bin/hello: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, Go BuildID=1w9wEh8RBZis2_xkLX6M/eOAKcw0ZU5yiiXpMtRJ8/NLK6t2yr6bl6_YASf6yo/CgOwlW6AFER0KJNxHmyT, with debug_info, not stripped
+	$ go install
+	$ export PATH=$PATH:/home/laura/go/bin/hello
+	$ hello
+		Command 'hello' not found, but can be installed with...
+	$ sudo hello
+	$ echo $PATH
+		/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/usr/local/go/bin:/home/laura/go/bin/hello	sudo: hello: command not found
+	// strange: now there is no longer a 'hello' binary in the working dir
+	$ ll /home/laura/go/bin/hello
+		-rwxrwxr-x 1 laura laura 2265847 Feb 15 16:44 /home/laura/go/bin/hello*
+
+Note: go install removes the binary from the dir with the go program
+
+Write up my question
+	I am following this Go language tutorial (https://go.dev/doc/tutorial/compile-install) that uses the command 'go install' to install an executable so it can run without specifying its path. These are the commands I've run, and their outupt. Why does my installed executable not run?
+
+	$ ls
+		go.mod  go.sum  hello.go
+	$ go build
+	$ ls
+		go.mod  go.sum  hello  hello.go
+	$ ./hello
+		map[Darrin:Hi, Darrin. Welcome! Gladys:Hi, Gladys. Welcome! Samantha:Hi, Samantha. Welcome!]
+	$ go list -f '{{.Target}}'
+		/home/laura/go/bin/hello
+	$ go install
+	$ export PATH=$PATH:/home/laura/go/bin/hello
+	$ echo $PATH
+		/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/usr/local/go/bin:/home/laura/go/bin/hello:/home/laura/go/bin/hello
+	$ file /home/laura/go/bin/hello
+		/home/laura/go/bin/hello: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, Go BuildID=1w9wEh8RBZis2_xkLX6M/eOAKcw0ZU5yiiXpMtRJ8/NLK6t2yr6bl6_YASf6yo/CgOwlW6AFER0KJNxHmyT, with debug_info, not stripped
+	$ $ hello
+		Command 'hello' not found, but can be installed with
+
+Realized before asking chat, this allows the binary to run:
+	$ export PATH=$PATH:/home/laura/go/bin/
+Needed the parent dir of the exe, not the exe path
+
+Notes about behavior of $PATH
+	- 'export $PATH' only applies for the current session, gone after browser reopened
+	- the items persistently in PATH are set for m machine in ~/.profile
+	- 'specifies a list of directories where executable files are located. When you run a command in the terminal, the system searches through these directories, in order, to find the executable file for that command'
+
+
+Tutorial 3. Getting started with multi-module workspaces
+
+
+-----------------------------------
+
+2/13/25
+
+Continue Alex Mux tutorial video
+Channel create: var c = make(chan int)
+range c: iterates over the contents of the channel
+'defer' can be declared at top of method, and executes just before method exits
+Can use source channel as cases in a select statement
+Capital-letter named functions can be imported elsewhere, lower-case named functions are only local
+
+Watch another tutorial, 1:34 hour
+	Full Golang Tutorial - Learn Go by Building a TodoList App
+	TechWorld with Nana
+	https://www.youtube.com/watch?v=XCZWyN9ZbEQ
+
+This video is a low slower, more basics
+Reasons for go: better parallelization, distributed infrastructure, multiple processors
+Go has built-in concurrency handling to run distributed
+Docker and Kubernetes written in Go
+Same Go binary can run on eg linux and windows
+Uses Goland IDE, by JetBrains
+Whole lot about the IDE
+Ended at 20:00
+
+-----------------------------------
+
+2/12/25
+
+Watch tutorial, 1:07 hour
+	Learn GO Fast: Full Tutorial
+	Alex Mux
+	https://www.youtube.com/watch?v=8uiZC0l4Ajw
+
+Go has built-in concurrency with goroutines
+Package: director with go files
+Module: made from package
+In Go it is an error to import a package but not use it, same for declaring variable
+cap(sliceName) returns the capacity of a slice, different from len(sliceName) that returns the count of its indices used
+Can specify the capacity of a slice when creating it
+	var intslice []int32 = make(int32[], 3, 8)   // length 3, capacity 8
+By default capacity of slice is same as its length
+Map will ALWAYS return a value even if key does not exist (returns default value of value type, nil or 0)
+Use the boolean in map return value that shows whether key exists
+len(string) returns its length in bytes not characters
+Runes though will be consistent between character and byte
+Can make 'single-use' structs, as a var: have to re-declare full struct{} to make another one
+Has interface data type, to define a required method
+Pointers declared using * syntax
+	var p *int32  // intializes to nil, meaning it does not have an address assigned (ie available place for value)
+	var p *int32 = new(int32)  // now has an address eg 0x1b0c, and at that location is default int value 0
+Concurrency
+	sync.WaitGroup{}, wg.Add(1), wg.Wait(), wg.Done
+	sync.Mutex{}, m.lock(), m.Unlock()
+Channel: values stay in them until they're read
+
+Ended at 49:00
+
+-----------------------------------
 
 2/11/25
 
@@ -66,8 +190,7 @@ Install steps to not result in being able to execute 'hello' from another dir
 			sudo apt  install hello-traditional  # version 2.10-6
 			See 'snap info hello' for additional versions.
 
-Check into: will the install step not over-write an existing 'hello'?
-
+Check into: will the install step not over-write an existing /home/laura/go/bin/hello/?
 
 -----------------------------------
 
