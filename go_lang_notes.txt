@@ -10,18 +10,250 @@ Resume Tutorials https://go.dev/doc/tutorial/getting-started
 		/ e. Return greetings for multiple people
 		/ f. Add a test
 		/ g. Compile and install the application
-	3. Getting started with multi-module workspaces
-	4. Accessing a relational database
-	5. Developing a RESTful API with Go and Gin
-	6. Getting started with generics
+	/ 3. Getting started with multi-module workspaces - finished 2/15/25
+	/ 4. Accessing a relational database - finished 2/15/25
+	/ 5. Developing a RESTful API with Go and Gin - finished 2/15/25
+	/ 6. Getting started with generics - finished 2/15/25
 	7. Getting started with fuzzing
-	8. Gettins started with govulncheck
-	9. Find and fix vulnerabile dependencies with VS Code Go
-	10. A tour of Go
+	8. A tour of Go: includes exercises
+
+Standard library - https://pkg.go.dev/std
+
+Additional things to read - https://go.dev/doc/
+	Codewalk about first class functions - https://go.dev/doc/codewalk/functions/
 
 
 =====================================
 
+2/21/25
+
+Debug the Reverse function in tutorial about fuzzing - https://go.dev/doc/tutorial/fuzz
+	Useful - https://go.dev/blog/strings
+	Excellent background - https://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/
+
+Redo tutorial 7 to understand the task again
+	https://go.dev/doc/tutorial/fuzz
+	$ mkdir /home/laura/Documents/CS_Study/Go_Lang/tutorial/7_fuzzing/fuzz_v2
+
+Set up main.go and reverse_test.go: TestReverse() makes map defining expected results
+	$ go test
+		-> PASS ok
+
+	testing.T is a type provided by Go's built-in testing package, which is used for writing and running tests. It represents the state of a single test, including its success or failure, and provides methods for reporting errors, logging messages, and controlling test execution.
+
+	When you define a test function (e.g., TestReverse), the testing framework automatically passes an instance of *testing.T to the function. This allows you to interact with the test’s execution and report any issues.
+
+Add FuzzReverse to reverse_test.go
+How to run only one test, if multiple in file: test -run=FuzzReverse
+Test result with both functions in the file shows PASS, does not list which it ran
+	$ go test
+		-> PASS ok  	example/fuzz_v2	0.001s
+	$ go test -run=FuzzReverse
+		-> PASS ok  	example/fuzz_v2	0.001s
+	$ go test -fuzz=Fuzz
+		-> fuzz: elapsed: 0s, gathering baseline coverage: 0/3 completed
+			fuzz: elapsed: 0s, gathering baseline coverage: 3/3 completed, now fuzzing with 8 workers
+			fuzz: elapsed: 0s, execs: 1442 (21061/sec), new interesting: 5 (total: 8)
+			--- FAIL: FuzzReverse (0.07s)
+			    --- FAIL: FuzzReverse (0.00s)
+			        reverse_test.go:47: Reverse produced invalid UTF-8 string "\x88\xbb\xe5"
+			Failing input written to testdata/fuzz/FuzzReverse/8ab404dfe6ed30b2
+		    To re-run:
+		    go test -run=FuzzReverse/8ab404dfe6ed30b2
+			FAIL
+			exit status 1
+			FAIL	example/fuzz_v2	0.072s
+
+	$ cat testdata/fuzz/FuzzReverse/8ab404dfe6ed30b2 
+		go test fuzz v1
+		string("廈")
+
+/ Make method in main.go that prints each byte in string
+Make method in main.go that prints each rune in string
+	Read this for high context info https://go.dev/blog/strings
+
+After function revised: rerun with the one fuzz-generated value that broke it before
+	$ fuzz_v2 $ go test
+		runes: ['H' 'e' 'l' 'l' 'o' ',' ' ' 'w' 'o' 'r' 'l' 'd']
+		runes: ['d' 'l' 'r' 'o' 'w' ' ' ',' 'o' 'l' 'l' 'e' 'H']
+		runes: [' ']
+		runes: [' ']
+		runes: ['!' '1' '2' '3' '4' '5']
+		runes: ['5' '4' '3' '2' '1' '!']
+		runes: ['廈']
+		runes: ['廈']
+		PASS
+		ok  	example/fuzz_v2	0.001s
+
+Rerun fuzzing: got farther but broke again
+Earlier error was returning an invalid utf8 string
+This time error is that double reverse does not match
+	$ go test -fuzz=Fuzz
+		fuzz: elapsed: 0s, gathering baseline coverage: 0/9 completed
+		fuzz: minimizing 38-byte failing input file
+		fuzz: elapsed: 0s, gathering baseline coverage: 5/9 completed
+		--- FAIL: FuzzReverse (0.04s)
+		    --- FAIL: FuzzReverse (0.00s)
+		        reverse_test.go:47: Before: "\xe8", after: "�"
+		    
+		    Failing input written to testdata/fuzz/FuzzReverse/5845f96f56664c01
+		    To re-run:
+		    go test -run=FuzzReverse/5845f96f56664c01
+		FAIL
+		exit status 1
+		FAIL	example/fuzz_v2	0.043s
+
+Try stepwise run with that value in main.go
+Note: this dir still has the file with the first value that failed
+	$ cat testdata/fuzz/FuzzReverse/
+
+
+-----------------------------------
+
+2/15/25
+
+Tutorial 4. Accessing a relational database
+	https://go.dev/doc/tutorial/database-access
+
+Install MySQL
+	$ sudo apt install mysql-server
+	$ sudo mysql_secure_installation
+		// chat: if you're using mysql purely for practice and tutorials, not strictly necessary but still good practice. Sets root password (otherwise mysql root user accessible without auth), removes remote root login
+		-> validate password component to check strong passwords: no
+		-> remove anonymous users: yes
+		-> disallow remote root login: yes
+		-> remove test database that anyone can access: yes
+		// this is part of MySQL - https://dev.mysql.com/doc/refman/8.4/en/mysql-secure-installation.html
+	$ mysql --version
+		mysql  Ver 8.0.41-0ubuntu0.24.04.1 for Linux on x86_64 ((Ubuntu))
+
+Did not set root password, add afterwards: either of these are working
+	
+	// Method 1
+	$ sudo mysql -u root
+	mysql $ ALTER USER 'root'@'localhost' IDENTIFIED BY 'your_new_password';
+
+	Method 2
+	$ sudo mysql
+	mysql> ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'your_new_password';
+	mysql> FLUSH PRIVILEGES;
+
+Chat response about how to redo msql_secure_install still requires root login, so not working
+
+Remove install
+Redo with THESE instructions - https://dev.mysql.com/doc/mysql-apt-repo-quick-guide/en/
+	$ sudo dpkg -i ~/Downloads/mysql-apt-config_0.8.33-1_all.deb
+	$ sudo apt-get update
+	$ sudo apt-get install mysql-server
+	$ mysql_secure_installation
+
+The other instructions from chat did NOT open the installer dialogue that selected a version and prompted for root password, seem to have been faulty
+
+Proceed with Golang tutorial
+Note: when in mysql propmt, use full qualified path to sql script
+	mysql> source /home/laura/Documents/CS_Study/Go_Lang/tutorial/4_relational_database/data-access/create-tables.sql
+Driver to use - https://github.com/go-sql-driver/mysql/
+Note: sublime when editing a file named .go automatically has command assistance
+main.go makes a variable 'db' that is pointer to the database, and serves as handle
+	var db *sql.DB
+Variable type is from the sql package
+As example only, db is global variable, in prod would pass db to functions that needed it
+Config struct formats the info easier to read than a string would be
+Steps all work
+
+Code review of main.go
+	Config declared using type inferrence :=
+	Declares early in method to close query before exiting method
+		defer rows.Close()
+	rows.Scan() seems to loop over the returned query result
+	albumByID gets and evaluates err in separate line from the query
+		    row := db.QueryRow("SELECT * FROM album WHERE id = ?", id)
+		    if err := row.Scan(&alb.ID, &alb.Title, &alb.Artist, &alb.Price); err != nil {
+		        if err == sql.ErrNoRows {
+		            return alb, fmt.Errorf("albumsById %d: no such album", id)
+		        }
+		        return alb, fmt.Errorf("albumsById %d: %v", id, err)
+		    }
+
+Tutorial 5. Developing a RESTful API with Go and Gin
+	Two endpoints for an API that provides access to store selling vinyl vintage records
+		/albums
+			GET - get list of all albums in json
+			POST - add new album from request sent as json
+		/albums/:id
+			GET - get an album by its id, returning album data as JSON
+	Struct tags suck as 'json:"artist"' specify what a field's name should be when serialized into json
+	gin.Context is the most important part of Gin. It carries request details, validates and serializes JSON, and more
+	Context.IndentedJSON can be better to read when debugging, Context.JSON is more compact
+	Conventional order of main.go: package, install, declare variables, main(), methods()
+	Golang does not envorce order of declaring functions
+	Use the GET function to associate the GET HTTP method and /albums path with a handler function
+	Note that you’re passing the name of the getAlbums function. This is different from passing the result of the function, which you would do by passing getAlbums() (note the parenthesis)
+		router.GET("/albums", getAlbums)
+
+	$ go run .
+		[GIN-debug] [WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.
+
+		[GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
+		 - using env:	export GIN_MODE=release
+		 - using code:	gin.SetMode(gin.ReleaseMode)
+
+		[GIN-debug] GET    /albums                   --> main.getAlbums (3 handlers)
+		[GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
+		Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.
+		[GIN-debug] Listening and serving HTTP on localhost:8080
+
+	Note: running the POST request before re-running the server with that command linked to a method returns 404
+	main() declares what Golang methods
+
+6. Getting started with generics
+	Method signature to accept several types
+		func SumIntsOrFloats[K comparable, V int64 | float64](m map[K]V) V {
+	V can be union of int64 and float64, aka '|', aka logical OR
+	Uses an interface to define a type constant
+		type Number interface {
+		    int64 | float64
+		}
+
+7. Getting started with fuzzing
+	Method Reverse: accept a string, loop over it a byte at a time, and return the reversed string at the end
+	Makes use of 'go test' automatically running file '*_test.go'
+	'You can keep unit tests, benchmarks, and fuzz tests in the same *_test.go file'
+	'When fuzzing, you can’t predict the expected output, since you don’t have control over the inputs' - but this test verifies that reversing twice generates the original, and is still valid UTF-8
+	TestReverse puts the inputs and expected values for three test cases into a struct, and iterates over them
+	'go test' with method FuzzReverse also passes: it starts with a hardcoded test case that it adds to the seed corpus
+	But running it with the flag '-fuzz' fails
+	The value that caused the failure is written to a file
+		$ go test -fuzz=Fuzz
+		$ cat testdata/fuzz/FuzzReverse/3937f99854af7817 
+			go test fuzz v1
+			string("٥")
+	My initial fuzz run does seem to have worked for 1 value (the hello world hardcoded?)
+		$ go test -fuzz=Fuzz
+			fuzz: elapsed: 0s, gathering baseline coverage: 0/12 completed
+			failure while testing seed corpus entry: FuzzReverse/3937f99854af7817
+			fuzz: elapsed: 0s, gathering baseline coverage: 2/12 completed
+			--- FAIL: FuzzReverse (0.02s)
+			    --- FAIL: FuzzReverse (0.00s)
+			        reverse_test.go:38: Reverse produced invalid UTF-8 string "\xa5\xd9"
+			FAIL
+			exit status 1
+			FAIL	example/fuzz	0.019s
+
+	Rerunning 'go test' also fails, since it uses that same input (even without fuzz flag)
+	It fails at 0/12 completed, since it starts with the failing value
+
+	Debug the issue
+	Huge hint in description of method: reads one byte at a time
+	UTF-8 uses a VARIABLE number of bytes to store characters
+	How to fix this: review description of runes in earlier tutorial
+	utf8 package docs - https://pkg.go.dev/unicode/utf8@go1.24.0
+	Try DecodeRune
+
+	Useful - https://go.dev/blog/strings
+	Excellent background - https://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/
+
+-----------------------------------
 
 2/15/25
 
@@ -82,9 +314,14 @@ Notes about behavior of $PATH
 	- the items persistently in PATH are set for m machine in ~/.profile
 	- 'specifies a list of directories where executable files are located. When you run a command in the terminal, the system searches through these directories, in order, to find the executable file for that command'
 
-
 Tutorial 3. Getting started with multi-module workspaces
-
+	- Purpose of multi-module workspace: tell the go command you're writing code for multiple modules at same time, easily build and run code in those modules
+	- Will create two modules in shared multi-module workspace, make changes to them, and see results in a build
+	- go get: adds a dependency
+	- go work: creates file 'go.wok' in the workspace, containing the modules in dir specified
+	- go.wok has 'use' to specify which module to use as main during build
+	- Download a repo with a module, and modify it
+	- NOTE: 'workspace' seems like a built-in gradle for java
 
 -----------------------------------
 
