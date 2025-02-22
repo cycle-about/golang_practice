@@ -106,7 +106,34 @@ This time error is that double reverse does not match
 Try stepwise run with that value in main.go
 Note: this dir still has the file with the first value that failed
 	$ cat testdata/fuzz/FuzzReverse/
+	$ cat testdata/fuzz/FuzzReverse/5845f96f56664c01 
+		go test fuzz v1
+		string("\xe8")
 
+Read some about this, not able to find way to make that input to a raw string literal
+Looked ahead in tutorial, copied in the 'debug' method to check for valid utf8
+Run a test with a particular input (rather than defining the input in main as I had been)
+	$ go test -run=FuzzReverse/5845f96f56664c01
+
+Did not think to check if the string was utf8: so it SHOULD be an error rather than handled
+Pasted in final methods, run works
+
+$ go test -fuzz=Fuzz -fuzztime 30s
+fuzz: elapsed: 0s, gathering baseline coverage: 0/41 completed
+fuzz: elapsed: 0s, gathering baseline coverage: 41/41 completed, now fuzzing with 8 workers
+fuzz: elapsed: 3s, execs: 436453 (145448/sec), new interesting: 1 (total: 42)
+fuzz: elapsed: 6s, execs: 863236 (142250/sec), new interesting: 2 (total: 43)
+fuzz: elapsed: 9s, execs: 1288575 (141816/sec), new interesting: 2 (total: 43)
+fuzz: elapsed: 12s, execs: 1700731 (137356/sec), new interesting: 2 (total: 43)
+fuzz: elapsed: 15s, execs: 2122368 (140560/sec), new interesting: 2 (total: 43)
+fuzz: elapsed: 18s, execs: 2540204 (139240/sec), new interesting: 2 (total: 43)
+fuzz: elapsed: 21s, execs: 2939078 (132997/sec), new interesting: 2 (total: 43)
+fuzz: elapsed: 24s, execs: 3308394 (123116/sec), new interesting: 2 (total: 43)
+fuzz: elapsed: 27s, execs: 3675997 (122447/sec), new interesting: 2 (total: 43)
+fuzz: elapsed: 30s, execs: 4051364 (125212/sec), new interesting: 2 (total: 43)
+fuzz: elapsed: 30s, execs: 4051364 (0/sec), new interesting: 2 (total: 43)
+PASS
+ok  	example/fuzz_v2	30.090s
 
 -----------------------------------
 
