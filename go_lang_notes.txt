@@ -1,6 +1,4 @@
-Tutorials
-
-Resume Tutorials https://go.dev/doc/tutorial/getting-started
+Tutorials - https://go.dev/doc/tutorial/
 	/ 1. Getting started - 1/27/25
 	/ 2. Create a Go module - finished 2/15/25
 		/ a. Create a module
@@ -14,16 +12,221 @@ Resume Tutorials https://go.dev/doc/tutorial/getting-started
 	/ 4. Accessing a relational database - finished 2/15/25
 	/ 5. Developing a RESTful API with Go and Gin - finished 2/15/25
 	/ 6. Getting started with generics - finished 2/15/25
-	7. Getting started with fuzzing
+	/ 7. Getting started with fuzzing - finished 2/22/25
 	8. A tour of Go: includes exercises
+		/ a. Welcome: installed the module - 3/1/25
+		/ b. Packages, variables, and functions - 3/1/25
+		c. Flow control statements: for, if, else, switch, and defer
+		d. More types: structs, slices, and maps
+		e. Methods and interfaces
+		f. Generics
+		g. Concurrency
 
 Standard library - https://pkg.go.dev/std
 
 Additional things to read - https://go.dev/doc/
+	Declarations design choices - https://go.dev/blog/declaration-syntax
 	Codewalk about first class functions - https://go.dev/doc/codewalk/functions/
 
-
 =====================================
+
+3/2/25
+
+Continue A Tour of Go
+Have been running locally as installed module
+	$ go install golang.org/x/website/tour@latest
+		go: downloading golang.org/x/website v0.0.0-20250228200226-a04b3c9a44e3
+		go: downloading golang.org/x/tools v0.30.0
+		go: downloading golang.org/x/mod v0.23.0
+		go: downloading golang.org/x/sync v0.11.0
+		go: downloading golang.org/x/net v0.35.0
+		go: downloading github.com/yuin/goldmark v1.6.0
+	// add to bashrc: 'export PATH=$PATH:$HOME/go/bin'
+	$ tour
+		/
+		/tour/
+		2025/03/01 09:15:52 A browser window should open. If not, please visit http://127.0.0.1:3999
+		/
+		/tour/
+		/tour/static/css/app.css
+		/tour/static/lib/codemirror/lib/codemirror.css
+		/tour/script.js
+		/images/icons/brightness_6_gm_grey_24dp.svg
+		/images/icons/brightness_2_gm_grey_24dp.svg
+		/images/icons/light_mode_gm_grey_24dp.svg
+		/images/go-logo-white.svg
+		/socket
+		2025/03/01 09:15:53 accepting connection from: 127.0.0.1:50930
+		/images/favicon-gopher-plain.png
+		/images/favicon-gopher.svg
+		/tour/static/partials/toc-button.html
+		/tour/static/partials/feedback-button.html
+		/tour/lesson/
+		/tour/static/partials/toc.html
+		/tour/static/partials/editor.html
+		/tour/static/img/gopher.png
+		2025/03/01 09:18:21 running snippet from: 127.0.0.1:50930
+		2025/03/01 09:18:23 running snippet from: 127.0.0.1:50930
+		2025/03/01 09:19:32 running snippet from: 127.0.0.1:50930
+		2025/03/01 09:21:35 running snippet from: 127.0.0.1:50930
+		2025/03/01 09:21:43 running snippet from: 127.0.0.1:50930
+		/blog/gos-declaration-syntax
+		/tour/static/css/app.css
+		/tour/static/lib/codemirror/lib/codemirror.css
+		/images/go-logo-white.svg
+		/images/icons/brightness_6_gm_grey_24dp.svg
+		/images/icons/brightness_2_gm_grey_24dp.svg
+		/images/icons/light_mode_gm_grey_24dp.svg
+		/socket
+		2025/03/01 09:21:59 accepting connection from: 127.0.0.1:44228
+		/tour/static/partials/toc-button.html
+		/tour/static/partials/feedback-button.html
+		/tour/lesson/
+		/tour/static/partials/toc.html
+		/tour/static/partials/editor.html
+		/tour/static/img/gopher.png
+		/blog/gos-declaration-syntax
+		/tour/static/css/app.css
+		/tour/static/lib/codemirror/lib/codemirror.css
+		/images/go-logo-white.svg
+		/images/icons/brightness_6_gm_grey_24dp.svg
+		/images/icons/brightness_2_gm_grey_24dp.svg
+		/images/icons/light_mode_gm_grey_24dp.svg
+		/tour/static/partials/toc-button.html
+		/tour/static/partials/feedback-button.html
+		/tour/lesson/
+		/tour/static/partials/toc.html
+		/tour/static/partials/editor.html
+		/tour/static/img/gopher.png
+		/socket
+		2025/03/01 09:22:08 accepting connection from: 127.0.0.1:46250
+		/tour/basics/4
+		/tour/static/lib/codemirror/lib/codemirror.css
+		/tour/static/css/app.css
+		/images/go-logo-white.svg
+		/images/icons/brightness_6_gm_grey_24dp.svg
+		/images/icons/brightness_2_gm_grey_24dp.svg
+		/images/icons/light_mode_gm_grey_24dp.svg
+		/tour/static/partials/toc-button.html
+		/tour/static/partials/feedback-button.html
+		/tour/lesson/
+		/tour/static/partials/toc.html
+		/tour/static/partials/editor.html
+		/tour/static/img/gopher.png
+		/socket
+		2025/03/01 09:22:13 accepting connection from: 127.0.0.1:46276
+		2025/03/01 09:23:57 running snippet from: 127.0.0.1:46276
+		2025/03/01 20:32:41 running snippet from: 127.0.0.1:46276
+		2025/03/01 20:33:19 running snippet from: 127.0.0.1:46276
+		2025/03/01 20:34:56 running snippet from: 127.0.0.1:46276
+		2025/03/01 20:35:40 running snippet from: 127.0.0.1:46276
+		2025/03/01 20:36:54 running snippet from: 127.0.0.1:46276
+		2025/03/01 20:42:01 running snippet from: 127.0.0.1:46276
+		2025/03/01 20:47:51 running snippet from: 127.0.0.1:46276
+		2025/03/01 20:48:26 running snippet from: 127.0.0.1:46276
+		2025/03/01 20:49:39 running snippet from: 127.0.0.1:46276
+		2025/03/01 20:49:46 running snippet from: 127.0.0.1:46276
+		2025/03/01 20:49:58 running snippet from: 127.0.0.1:46276
+		2025/03/01 20:51:23 running snippet from: 127.0.0.1:46276
+		2025/03/01 20:52:19 running snippet from: 127.0.0.1:46276
+		2025/03/01 20:55:02 running snippet from: 127.0.0.1:46276
+		2025/03/01 21:32:23 running snippet from: 127.0.0.1:46276
+		2025/03/01 21:33:03 running snippet from: 127.0.0.1:46276
+		2025/03/01 21:35:39 running snippet from: 127.0.0.1:46276
+		2025/03/01 21:35:44 running snippet from: 127.0.0.1:46276
+		2025/03/02 09:11:17 running snippet from: 127.0.0.1:46276
+		2025/03/02 09:31:00 running snippet from: 127.0.0.1:46276
+
+Make a .go file to save and annotate the Tour code
+	$ pwd
+		/home/laura/Documents/CS_Study/Go_Lang/tour_of_go
+	// review https://go.dev/doc/tutorial/create-module and https://go.dev/doc/tutorial/call-module-code
+	$ go mod init example.com/tour-of-go
+	$ subl tour.go     // package main, main() prints hello world
+	$ go run .
+
+Restart Tour of Go, adding most useful code to local file
+
+-----------------------------------
+
+3/1/25
+
+A tour of Go - https://go.dev/tour/welcome/1
+
+Download to run locally - https://go.dev/tour/welcome/3
+	$ cd /home/laura/Documents/CS_Study/Go_Lang/tutorial/tour_of_go
+	$ go install golang.org/x/website/tour@latest
+	'This will place a tour binary in your GOPATH's bin directory. When you run the tour program, it will open a web browser displaying your local version of the tour'
+
+Check contents of GOPATH bin dir: from chatgpt, defaults to ~/go/bin
+	$ ls ~/go/bin
+		hello  tour
+
+Trying to run it, and checks
+	$ go run tour
+		package tour is not in std (/usr/local/go/src/tour)
+	$ echo $PATH
+		/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/usr/local/go/bin
+	$ $ go tour
+		go tour: unknown command
+		Run 'go help' for usage.
+	$ tour
+		Command 'tour' not found, did you mean:
+		  command 'tor' from deb tor (0.4.8.10-1)
+		Try: sudo apt install <deb name>
+
+chatgpt: 'When you run go run hello, Go is expecting hello to be a Go source file or directory, but it's actually an already-compiled binary located in ~/go/bin'
+
+Add ~/go/bin to path
+	Add to bashrc: 'export PATH=$PATH:$HOME/go/bin'
+
+$ tour
+	Opens tutorial in browser, address 'http://127.0.0.1:3999/tour/welcome/1'
+
+A Tour of Go
+	Exported names: it is BUILT IN (not a convention) that capital letter names are exported from a package
+	'Naked' return: declare names of returned variables in method signature, then just 'return' finds them
+	Type of var can be omitted if it is initialized
+	Can initialize multiple variables at once, eg: var i, j int = 1, 2
+	byte type: alias for uint8
+	rune: alias for int32, represents Unicode code point
+	Use 'int' for integer unless have specific reason for sized or unsigned
+		MaxInt uint64     = 1<<64 - 1
+		chatgpt: The expression 1 << 64 - 1 in Go is performing a bit shift operation and subtraction
+			The expression 1 << 64 means you are shifting the number 1 left by 64 bits
+			In binary, 1 is represented as 000000...0001 (with 64 zeroes)
+			When you shift this left by 64 bits, you add 64 zeroes to the right of the 1, resulting in a number with a 1 at the 65th bit position
+			In other words, 1 << 64 creates the number 2^64
+	Conversion between types must be done explicitly, eg 'var f float64 = float64(i)'
+	Implicit variable typing (with either := or = with an initializer), will infer eg float64 or int
+
+In for loop, init and post statements are operatinal
+func main() {
+	sum := 1
+	for ; sum < 1000; {
+		fmt.Print(sum, " ")
+		sum += sum
+	}
+	fmt.Println(sum)
+}
+		-> 1 2 4 8 16 32 64 128 256 512 1024
+
+Without semicolons, for takes the place of while
+func main() {
+	sum := 1
+	for sum < 1000 {
+		sum += sum
+	}
+	fmt.Println(sum)
+}
+
+Infinite loop omits the loop condition
+func main() {
+	for {
+	}
+}
+
+-----------------------------------
 
 2/21/25
 
@@ -329,7 +532,7 @@ Write up my question
 		/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/usr/local/go/bin:/home/laura/go/bin/hello:/home/laura/go/bin/hello
 	$ file /home/laura/go/bin/hello
 		/home/laura/go/bin/hello: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, Go BuildID=1w9wEh8RBZis2_xkLX6M/eOAKcw0ZU5yiiXpMtRJ8/NLK6t2yr6bl6_YASf6yo/CgOwlW6AFER0KJNxHmyT, with debug_info, not stripped
-	$ $ hello
+	$ hello
 		Command 'hello' not found, but can be installed with
 
 Realized before asking chat, this allows the binary to run:
