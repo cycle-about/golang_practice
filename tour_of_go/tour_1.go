@@ -49,7 +49,7 @@ func split(sum int) (x, y int) {
 //     z      complex128 = cmplx.Sqrt(-5 + 12i)
 // )
 
-func main() {
+func Run_tour_1() {
     /*
     // numbers can be printed with strings comma-separated
     fmt.Println("My favorite number is", rand.Intn(10))
@@ -119,8 +119,8 @@ func main() {
     fmt.Println(needFloat(Big))
 
     // can reassign class var
-    i = 5
+    // i = 5
 
     // can't reassign class const
-    Small = 4  // cannot assign to Small (neither addressable nor a map index expression)
+    // Small = 4  // cannot assign to Small (neither addressable nor a map index expression)
 }

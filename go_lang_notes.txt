@@ -145,7 +145,7 @@ Make a .go file to save and annotate the Tour code
 	$ subl tour.go     // package main, main() prints hello world
 	$ go run .
 
-Restart Tour of Go, adding most useful code to local file
+Restart 'Tour of Go' adding most useful code to local file
 
 -----------------------------------
 
