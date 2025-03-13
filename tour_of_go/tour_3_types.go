@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	// "strings"
+	// "golang.org/x/tour/pic"
 )
 
 type Vertex struct {
@@ -90,32 +92,274 @@ func Run_tour_3() {
 	b[0] = "XXX" // element 0 of slice b is element 1 of array names (so paul)
 	fmt.Println(a, b) // a: john, XXX   b: XXX, george
 	fmt.Println(names) // john, XXX, george, ringo -> predicted all of these correctly
-	*/
 
-	// slice literal is like an array literal without length
-	// eg array literal: [3]bool{true, true, false}
-	// eg make that same array, and a slice that references it: []bool{true, true, false}
-	q := []int{2, 3, 5, 7, 11, 13}  // q is a slice literal that reference that array of ints
-	fmt.Println(q)
+	// page 9. slice literal is like an array literal without length
+	// eg array literal: 
+	// al := [3]bool{true, true, false}
+	// fmt.Printf("Type: %T, Value: %v\n", al, al) // [3]bool
+	// eg make that same array, and a slice that references it: 
+	// sl := []bool{true, true, false}
+	// fmt.Printf("Type: %T, Value: %v\n", sl, sl) // []bool
+	
+	// q := []int{2, 3, 5, 7, 11, 13}  // q is a slice literal that reference that array of ints
+	// fmt.Println(q)
 
-	r := []bool{true, false, true, true, false, true}
-	fmt.Println(r)
+	// r := []bool{true, false, true, true, false, true}
+	// fmt.Println(r)
 
 	// make a struct that contains an int i and a bool b
 	// ? anonymous struct?
 	// make a slice literal of those objects, containing items with those values for i and b
-	s := []struct {
-		i int
-		b bool
-	}{
-		{2, true},
-		{3, false},
-		{5, true},
-		{7, true},
-		{11, false},
-		{13, true},
-	}
-	fmt.Println(s)
+	// s := []struct {
+	// 	i int
+	// 	b bool
+	// }{
+	// 	{2, true},
+	// 	{3, false},
+	// 	{5, true},
+	// 	{7, true},
+	// 	{11, false},
+	// 	{13, true},
+	// }
+	// fmt.Println(s)
 
-	// my own idea: can q and r be used to make that slice literal of structs
+	// // getting and printing items in slices q and r
+	// for i := 0; i < len(q); i++ {
+	// 	fmt.Println(q[i])
+	// }
+
+	// my own idea: try to read from q and r to make struct like s
+
+	// error - []struct{i int; b bool} (type) is not an expression
+	// stu := []struct {
+	// 	i int
+	// 	b bool
+	// }
+
+	// this is valid, can assign to empty, and still must be used
+	// stu := []struct {
+	// 	i int
+	// 	b bool
+	// } {}
+
+	// try for loop in initializator
+	// error
+		// ./tour_3_types.go:144:3: syntax error: unexpected for, expected expression
+		// ./tour_3_types.go:148:1: syntax error: non-declaration statement outside function body
+
+	// stu := []struct {
+	// 	i int
+	// 	b bool
+	// } {
+	// 	for i := 0; i < len(q); i++ {
+	// 		stu.put(q[i], r[i])
+	// 	}
+	// }
+
+	// page 10. slice defaults
+	// s := []int{2, 3, 5, 7, 11, 13}  // make a slice
+
+	// s = s[1:4]  // redefine slice
+	// fmt.Println(s)  // 3, 5, 7
+
+	// s = s[:2]  // redefine slice of slice
+	// fmt.Println(s)  // 3, 5
+
+	// s = s[1:]  // redefine slice of slice of slice
+	// fmt.Println(s)  // 5
+
+	// page 11. slice length and capacity: length is ____, capacity is ____
+	// length of a slice: number of elements it contains
+	// capacity of a slice: number of elements in the underlying array, counting from the first element in the slice
+	//     -> this definition seems odd, omitting earlier elements but not later ones
+	s := []int{2, 3, 5, 7, 11, 13}
+	// len=6 cap=6 [2 3 5 7 11 13]
+	printSlice(s)
+
+	// Slice the slice to give it zero length.
+	s = s[:0]
+	printSlice(s) // []  - len=0 cap=6 []
+
+	// Extend its length.
+	s = s[:4]
+	printSlice(s)  // 2, 3, 5, 7 - len=4 cap=6 [2 3 5 7]
+
+	// Drop its first two values.
+	s = s[2:]
+	printSlice(s)  // 5, 7 - len=2 cap=4 [5 7]
+
+	// Try changing one of the slice operations in the example program to extend it beyond its capacity and see what happens
+	s = s[4:]
+	printSlice(s)  // panic: runtime error: slice bounds out of range [4:2]
+
+	// page 12. nil slice
+	// var s []int 					// nil slice -> [] 0 0 nil!
+	s := []int{} 					// NOT nil slice, only empty -> [] 0 0
+	fmt.Println(s, len(s), cap(s))  
+	if s == nil {
+		fmt.Println("nil!")
+	}
+
+	// page 13. creating slice with make
+	// make function creates dynamically-sized arrays: allocates a zeroed array, returns slice that refers to it
+	a := make([]int, 5)  // from an array with size 5, capacity default so 5, assign 'a' to slice to it
+	// prediction -> len=5 cap=5 [0 0 0 0 0]
+	printSlice("a", a)  // correct prediction
+
+	b := make([]int, 0, 5)  // from array with size 0, capacity 5, assign 'b' to slice to it
+	// prediction -> len=0 cap=5 []
+	printSlice("b", b)  // correct prediction
+
+	c := b[:2]  
+	// prediction -> len=0 cap=2 []
+	// from slice b indices 0-2, assign 'c' as a new slice
+	// slice b is an empty slice, but giving it indices makes its len those 2 indices, and does NOT change its capacity 5
+	// cap does not change because it 
+	printSlice("c", c)
+	// actual: len=2 cap=5 [0 0]
+	// DOES NOT change cap b[:2] because 'first element of slice' is same as the array, count there to array end
+
+	d := c[2:5]  // 
+	// prediction -> arg is indices 2,3,4 of slice c, out of bounds????
+	// revised prediction after knowing answer to c: 
+	//     c has len=2 cap=5, this makes a slice with indices 2-5, so initializes 3 empty indices does not change cap
+	//     -> len=3 cap=5 [0 0 0]
+	printSlice("d", d)
+	// actual: d len=3 cap=3 [0 0 0]
+	// DOES change cap eg b[2:] because first element in slice is farther back in array, count there to end
+
+	// 'The capacity of a slice is the number of elements in the underlying array, counting from the first element in the slice' (page 11)
+
+	// page 14. slices of slices
+	// slices can contain any type, including other slices
+	// Create a tic-tac-toe board.
+	board := [][]string{
+		[]string{"_", "_", "_"},
+		[]string{"_", "_", "_"},
+		[]string{"_", "_", "_"},
+	}
+
+	// predict: len 3, and each of those items is a slice of strings -> correct
+	fmt.Println("len board: ", len(board))
+
+	// The players take turns: these are all reassigned at once
+	board[0][0] = "X"
+	board[2][2] = "O"
+	board[1][2] = "X"
+	board[1][0] = "O"
+	board[0][2] = "X"
+
+		// predicted end result - one not in right place
+		// x o x
+		// - - x
+		// - - o
+
+		// right answer
+		// x - x
+		// o - x
+		// - - o
+
+	// updated board prints once, space separated
+	for i := 0; i < len(board); i++ {
+		fmt.Printf("%s\n", strings.Join(board[i], " "))
+	}
+
+	// page 15. append to slice
+	// if current underlying array is too small, makes a new larger array pointed to by the returned slice
+	var s []int  // nil
+	printSlice(s)
+
+	// append works on nil slices.
+	s = append(s, 0)
+	printSlice(s)  // [0]
+
+	// The slice grows as needed.
+	s = append(s, 1)
+	printSlice(s)  // [0 1]
+
+	// We can add more than one element at a time.
+	s = append(s, 2, 3, 4)
+	printSlice(s)  // [0 1 2 3 4]
+
+	// page 16. range iterates over slice or map
+	// returns the index number, and copy of element at that index
+	var pow = []int{1, 2, 4, 8, 16, 32, 64, 128}
+
+	for i, v := range pow {
+		fmt.Printf("2**%d = %d\n", i, v)
+	}
+
+	// page 17. range ignore one return value
+	// like in python, ignore one of the returned values by assigning to '_'
+	// var names CAN start with '_'
+	pow := make([]int, 10)
+	for i := range pow {
+		pow[i] = 1 << uint(i) // == 2**i  // bit shift once left means multiply by 2
+	}
+	// for _, value := range pow {
+	// 	fmt.Printf("%d\n", value)
+	// 	fmt.Printf("%d\n", _)  // cannot use _ as value or type
+	// }
+		for _i, value := range pow {
+		fmt.Printf("%d\n", value)
+		fmt.Printf("%d\n", _i)
+	}
+	*/
+
+	/* page 18. Exercies: Slices
+	Implement Pic. It should return a slice of length dy, each element of which is a slice of dx 8-bit unsigned integers. 
+	When you run the program, it will display your picture, interpreting the integers as grayscale (well, bluescale) values.
+	The choice of image is up to you. Interesting functions include (x+y)/2, x*y, and x^y.
+	(You need to use a loop to allocate each []uint8 inside the [][]uint8.)
+	(Use uint8(intValue) to convert between types.) 
+	*/
+
+	// dx := 4
+	dy := 3
+
+	picture := make([]uint, dy)
+	// picture := [][]uint{
+	// 	[]uint{},
+	// 	[]uint{"_", "_", "_"},
+	// 	[]uint{"_", "_", "_"},
+	// }
+	printSlice(picture)
+	// for i := 0; i < dy; i++ {
+	// 	append(picture, make([]uint, dx))
+	// }
+	// printSlice(picture)
+	
+
+	// pic.Show(Pic)
 }
+
+// func Pic(dx, dy int) [][]uint8 {
+// 	// (x+y)/2
+// }
+
+/*
+	Behavior with methods with same name
+	1. Two methods with same name, second one has correct args for its call
+		2 errors: 
+			- too many arguments in call to printSlice, have (string, []int), want ([]int)
+			- printSlice redeclared in this block, ./tour_3_types.go:234:6: other declaration of printSlice
+	2. Two methods with same name, first one has correct args for its call
+		1 error:  printSlice redeclared in this block, ./tour_3_types.go:236:6: other declaration of printSlice
+	3. Two methods with same name and same args
+		1 error: printSlice redeclared in this block, ./tour_3_types.go:237:6: other declaration of printSlice
+*/
+
+// test with duplicate method signature
+// func printSlice(s string, x []int) {
+// 	fmt.Println("hello")
+// }
+
+// same method name, different signature due to args
+func printSlice(s []uint) {
+	fmt.Printf("len=%d cap=%d %v\n", len(s), cap(s), s)
+}
+
+// func printSlice(s string, x []int) {
+// 	fmt.Printf("%s len=%d cap=%d %v\n",
+// 		s, len(x), cap(x), x)
+// }

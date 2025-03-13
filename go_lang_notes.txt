@@ -41,10 +41,13 @@ Additional things to read - https://go.dev/doc/
 Resume Tour of Go Part 3
 
 How to restart local server
-	$ tour
+$ tour
 
-Where I was, from tour_3_types.go
+Where I was, from tour_3_types.go: slice literal and structs
 
+How to run m go file as local module
+// /home/laura/Documents/CS_Study/Go_Lang/tour_of_go/main.go calls Run_tour_3()
+$ go run .
 
 -----------------------------------
 
