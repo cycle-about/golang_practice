@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	// "strings"
-	// "golang.org/x/tour/pic"
+	"golang.org/x/tour/pic"
 )
 
 type Vertex struct {
@@ -314,28 +314,42 @@ func Run_tour_3() {
 	(Use uint8(intValue) to convert between types.) 
 	*/
 
-	// dx := 4
-	dy := 3
+	// dx := 4  // width
+	// dy := 3  // height
 
-	picture := make([]uint, dy)
-	// picture := [][]uint{
-	// 	[]uint{},
-	// 	[]uint{"_", "_", "_"},
-	// 	[]uint{"_", "_", "_"},
-	// }
-	printSlice(picture)
-	// for i := 0; i < dy; i++ {
-	// 	append(picture, make([]uint, dx))
-	// }
-	// printSlice(picture)
-	
+	// // picture := make([]uint8, dx)
+	// picture := [][]uint8{}
+	// print2DSlice(picture)
 
-	// pic.Show(Pic)
+	// // rowSlice := make([]uint8, dy)
+	// // for i := 0; i < dy; i++ {
+	// // 	rowSlice[i] = 8
+	// // }
+
+	// // picture = append(picture, rowSlice)
+
+	// for i:= 0; i < dy; i++ {
+	// 	rowSlice := make([]uint8, dx)
+	// 	picture = append(picture, rowSlice)
+	// }
+
+	// print2DSlice(picture)
+
+	// Question: how can this be called without the int args in its signature?
+	pic.Show(Pic)
 }
 
-// func Pic(dx, dy int) [][]uint8 {
-// 	// (x+y)/2
-// }
+func Pic(dx, dy int) [][]uint8 {
+	// make nil 2D array
+	picture := [][]uint8{}
+	// make slices of the needed size
+	for i:= 0; i < dy; i++ {
+		rowSlice := make([]uint8, dx)
+		picture = append(picture, rowSlice)
+	}
+	// print2DSlice(picture)
+	return picture
+}
 
 /*
 	Behavior with methods with same name
@@ -355,8 +369,16 @@ func Run_tour_3() {
 // }
 
 // same method name, different signature due to args
-func printSlice(s []uint) {
+func printSlice(s []uint8) {
 	fmt.Printf("len=%d cap=%d %v\n", len(s), cap(s), s)
+}
+
+// same method name, different signature due to args
+func print2DSlice(s [][]uint8) {
+	fmt.Println("2D slice")
+	for _, value := range s {
+		fmt.Printf("%d\n", value)
+	}
 }
 
 // func printSlice(s string, x []int) {
