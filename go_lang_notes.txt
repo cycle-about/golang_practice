@@ -22,6 +22,12 @@ Tutorials - https://go.dev/doc/tutorial/
 		f. Generics
 		g. Concurrency
 
+Questions to revisit
+	Tour of Go, section Basics, page 'Struct Literals': why does this print how it does
+		// The special prefix & returns a pointer to the struct value
+		p  = &Vertex{1, 2} // has type *Vertex
+		fmt.Println(p)     // &{1 2}
+
 Standard library - https://pkg.go.dev/std
 
 Additional things to read - https://go.dev/doc/
@@ -29,6 +35,18 @@ Additional things to read - https://go.dev/doc/
 	Codewalk about first class functions - https://go.dev/doc/codewalk/functions/
 
 =====================================
+
+3/13/25
+
+Resume Tour of Go Part 3
+
+How to restart local server
+	$ tour
+
+Where I was, from tour_3_types.go
+
+
+-----------------------------------
 
 3/2/25
 
@@ -146,6 +164,13 @@ Make a .go file to save and annotate the Tour code
 	$ go run .
 
 Restart 'Tour of Go' adding most useful code to local file
+
+Issue: remake module
+$ cat go.mod 
+	module example.com/tour-of-go
+
+Package:
+Module: 
 
 -----------------------------------
 
