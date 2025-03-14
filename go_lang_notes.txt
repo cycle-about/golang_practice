@@ -36,6 +36,15 @@ Additional things to read - https://go.dev/doc/
 
 =====================================
 
+2/14/25
+
+Continue exercise on page 18 of tour part 3
+Next question: how does the imported module run without args when method takes them?
+	Add print statements of those args
+	Read the docs on the module
+
+-----------------------------------
+
 3/13/25
 
 Resume Tour of Go Part 3

@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	// "strings"
-	"golang.org/x/tour/pic"
 )
 
 type Vertex struct {
@@ -305,50 +304,6 @@ func Run_tour_3() {
 		fmt.Printf("%d\n", _i)
 	}
 	*/
-
-	/* page 18. Exercies: Slices
-	Implement Pic. It should return a slice of length dy, each element of which is a slice of dx 8-bit unsigned integers. 
-	When you run the program, it will display your picture, interpreting the integers as grayscale (well, bluescale) values.
-	The choice of image is up to you. Interesting functions include (x+y)/2, x*y, and x^y.
-	(You need to use a loop to allocate each []uint8 inside the [][]uint8.)
-	(Use uint8(intValue) to convert between types.) 
-	*/
-
-	// dx := 4  // width
-	// dy := 3  // height
-
-	// // picture := make([]uint8, dx)
-	// picture := [][]uint8{}
-	// print2DSlice(picture)
-
-	// // rowSlice := make([]uint8, dy)
-	// // for i := 0; i < dy; i++ {
-	// // 	rowSlice[i] = 8
-	// // }
-
-	// // picture = append(picture, rowSlice)
-
-	// for i:= 0; i < dy; i++ {
-	// 	rowSlice := make([]uint8, dx)
-	// 	picture = append(picture, rowSlice)
-	// }
-
-	// print2DSlice(picture)
-
-	// Question: how can this be called without the int args in its signature?
-	pic.Show(Pic)
-}
-
-func Pic(dx, dy int) [][]uint8 {
-	// make nil 2D array
-	picture := [][]uint8{}
-	// make slices of the needed size
-	for i:= 0; i < dy; i++ {
-		rowSlice := make([]uint8, dx)
-		picture = append(picture, rowSlice)
-	}
-	// print2DSlice(picture)
-	return picture
 }
 
 /*
@@ -374,11 +329,19 @@ func printSlice(s []uint8) {
 }
 
 // same method name, different signature due to args
+// func print2DSlice(s [][]uint8) {
+// 	fmt.Println("2D slice")
+// 	for _, value := range s {
+// 		fmt.Printf("%d\n", value)
+// 	}
+// }
+
 func print2DSlice(s [][]uint8) {
-	fmt.Println("2D slice")
-	for _, value := range s {
-		fmt.Printf("%d\n", value)
+	for i, value := range s {
+		fmt.Printf("row=%d ", i)
+		printSlice(value)
 	}
+	fmt.Printf("\n")
 }
 
 // func printSlice(s string, x []int) {
