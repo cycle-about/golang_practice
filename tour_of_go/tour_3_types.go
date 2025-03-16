@@ -328,6 +328,10 @@ func printSlice(s []uint8) {
 	fmt.Printf("len=%d cap=%d %v\n", len(s), cap(s), s)
 }
 
+func printSliceShort(s []uint8) {
+	fmt.Println(s)
+}
+
 // same method name, different signature due to args
 // func print2DSlice(s [][]uint8) {
 // 	fmt.Println("2D slice")
@@ -340,6 +344,13 @@ func print2DSlice(s [][]uint8) {
 	for i, value := range s {
 		fmt.Printf("row=%d ", i)
 		printSlice(value)
+	}
+	fmt.Printf("\n")
+}
+
+func print2DSliceShort(s [][]uint8) {
+	for _, value := range s {
+		printSliceShort(value)
 	}
 	fmt.Printf("\n")
 }

@@ -1,7 +1,9 @@
+// drafts commented out to avoid name conflicts with sandbox version
+
 package main
 
 import (
-	"golang.org/x/tour/pic"
+	// "golang.org/x/tour/pic"
 )
 
 	/* 
@@ -14,19 +16,17 @@ import (
 	*/
 
 func Run_tour_3_ex() {
+	// Pic(3, 1)
+	// pic.Show(Pic)
 
-	// dx := 4  // width
-	// dy := 3  // height
-
-	pic.Show(Pic)
+	// Pic(10, 4)
+	// pic.Show(Pic)
 }
 
-// if not passed, dx and dy are 256
-func Pic(dx, dy int) [][]uint8 {
-	empty_array := make_2D_array(dx, dy)
-	return empty_array
-}
-
+// if not passed dx and dy are 256
+// func Pic(w, h int) [][]uint8 {
+// 	return make_2D_array(w, h)
+// }
 
 // row=0 len=0 cap=0 []
 // row=1 len=0 cap=0 []
@@ -40,12 +40,22 @@ func Pic(dx, dy int) [][]uint8 {
 // row=0 len=4 cap=4 [0 0 0 0]
 // row=1 len=4 cap=4 [0 0 0 0]
 // row=2 len=4 cap=4 [0 0 0 0]
-func make_2D_array(dx, dy int) [][]uint8 {
-	picture := [][]uint8{}		// this way makes nil structure
-	for i:= 0; i < dy; i++ {
-		rowSlice := make([]uint8, dx)
-		picture = append(picture, rowSlice)
-	}
-	print2DSlice(picture)
-	return picture
-}
+// func make_2D_array(w, h int) [][]uint8 {
+// 	picture := [][]uint8{}		// this way makes nil structure
+// 	for i:=0; i < h; i++ {
+// 		rowSlice := populate_row(w, i)
+// 		picture = append(picture, rowSlice)
+// 	}
+// 	print2DSliceShort(picture)
+// 	return picture
+// }
+
+// func populate_row(w, r int) []uint8 {
+// 	rowSlice := make([]uint8, w)
+// 	for i:= 0; i < w; i++ {
+// 		// rowSlice[i] = uint8((i+r)/2)
+// 		// rowSlice[i] = uint8(i*r)
+// 		rowSlice[i] = uint8(i^r)
+// 	}
+// 	return rowSlice
+// }
