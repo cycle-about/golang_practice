@@ -5,21 +5,21 @@ import (
 	// "strings"
 )
 
-type Vertex struct {
-	X int
-	Y int
-}
+// type Vertex struct {
+// 	X int
+// 	Y int
+// }
 
-// struct literal
-var (
-	v1 = Vertex{1, 2}  // has type Vertex
-	// can assign only subset of struct's fields using Name: syntax
-	v2 = Vertex{X: 1}  // Y:0 is implicit
-	v3 = Vertex{}      // X:0 and Y:0
-	// prefix & to a struct returns a pointer to struct value
-	p  = &Vertex{1, 2} // has type *Vertex
-	// p prints as: &{1 2}
-)
+// // struct literal
+// var (
+// 	v1 = Vertex{1, 2}  // has type Vertex
+// 	// can assign only subset of struct's fields using Name: syntax
+// 	v2 = Vertex{X: 1}  // Y:0 is implicit
+// 	v3 = Vertex{}      // X:0 and Y:0
+// 	// prefix & to a struct returns a pointer to struct value
+// 	p  = &Vertex{1, 2} // has type *Vertex
+// 	// p prints as: &{1 2}
+// )
 
 func Run_tour_3() {
 	/*
@@ -303,7 +303,62 @@ func Run_tour_3() {
 		fmt.Printf("%d\n", value)
 		fmt.Printf("%d\n", _i)
 	}
+
+	// page 19
+	var m map[string]Vertex
+	m = make(map[string]Vertex)
+	fmt.Println(m)  			 // map[]
+	m["Bell Labs"] = Vertex{
+		40.68433, -74.39967,
+	}
+	fmt.Println(m["Bell Labs"])  // {40.68433 -74.39967}
 	*/
+
+	// page 20. map literal, keys are required
+	// var m = map[string]Vertex{
+	// 	"Bell Labs": Vertex{
+	// 		40.68433, -74.39967,
+	// 	},
+	// 	"Google": Vertex{
+	// 		37.42202, -122.08408,
+	// 	},
+	// }
+	// fmt.Println(m)  // map[Bell Labs:{40.68433 -74.39967} Google:{37.42202 -122.08408}]
+
+	// page 21. can omit type name when populating type literal, if just type (eg here Vertex)
+	// var m = map[string]Vertex{
+	// 	"Bell Labs": {40.68433, -74.39967},
+	// 	"Google":    {37.42202, -122.08408},
+	// }
+	// fmt.Println(m)  // map[Bell Labs:{40.68433 -74.39967} Google:{37.42202 -122.08408}]
+
+	// page 22. adding to and removing from maps
+	// if value not found, returns default of the type, and second return value is boolean for if found
+	// m := make(map[string]int)
+	// fmt.Println("map when empty: ", m)
+	// fmt.Println("The value before key created:", m["Answer"])  // 0
+
+	// m["Answer"] = 42
+	// fmt.Println("The value:", m["Answer"])
+
+	// v, ok := m["Answer"]
+	// fmt.Println("The returned value:", v, "Was the value found:", ok)
+
+	// m["Answer"] = 48
+	// fmt.Println("The value redefined:", m["Answer"])
+
+	// delete(m, "Answer")
+	// fmt.Println("The value after deleted:", m["Answer"])
+
+	// // test that the key is actually present, using second return value of the find
+	// v2, ok2 := m["Answer"]
+	// fmt.Println("The returned value:", v2, "Was the value found:", ok2)
+
+	// page 23. 
+}
+
+type Vertex struct {
+	Lat, Long float64
 }
 
 /*
@@ -359,3 +414,5 @@ func print2DSliceShort(s [][]uint8) {
 // 	fmt.Printf("%s len=%d cap=%d %v\n",
 // 		s, len(x), cap(x), x)
 // }
+
+
