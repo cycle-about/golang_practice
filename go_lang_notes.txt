@@ -1,4 +1,4 @@
-Tutorials - https://go.dev/doc/tutorial/
+/ Tutorials - https://go.dev/doc/tutorial/
 	/ 1. Getting started - 1/27/25
 	/ 2. Create a Go module - finished 2/15/25
 		/ a. Create a module
@@ -13,14 +13,18 @@ Tutorials - https://go.dev/doc/tutorial/
 	/ 5. Developing a RESTful API with Go and Gin - finished 2/15/25
 	/ 6. Getting started with generics - finished 2/15/25
 	/ 7. Getting started with fuzzing - finished 2/22/25
-	8. A tour of Go: includes exercises
-		/ a. Welcome: installed the module - 3/1/25
-		/ b. Packages, variables, and functions - 3/1/25
-		c. Flow control statements: for, if, else, switch, and defer
-		d. More types: structs, slices, and maps
-		e. Methods and interfaces
-		f. Generics
-		g. Concurrency
+
+
+Tour of Go Contents
+	Welcome - module installed for local runs 3/1/25
+	1. Basics a. Packages, Variables, and functions - finished 3/1/25
+	2. Basics b. Flow control statements: for, if, else, switch, and defer
+	3. Basics c. More types: structs, slices, and maps - finished 3/30/25
+	4. Methods and Interfaces
+	5. Generics
+	6. Concurrency
+
+----------------------------------------
 
 Questions to revisit
 	Tour of Go, section Basics, page 'Struct Literals': why does this print how it does
@@ -39,7 +43,11 @@ Additional things to read - https://go.dev/doc/
 3/30/25
 
 Resume at: ex 3.26 Fibonacci
+Finished Fibonacci
+That was the end of Tour of Go, Basics part c on Types (structs, slices, maps)
 
+Begin Tour of Go 4. Methods and Interfaces (http://127.0.0.1:3999/tour/methods/1)
+	
 
 -----------------------------------
 

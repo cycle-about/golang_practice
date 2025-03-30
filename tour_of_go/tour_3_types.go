@@ -386,7 +386,7 @@ func Run_tour_3() {
 		36 -72
 		45 -90
 
-	// original calls
+	// original call and method
 	pos, neg := adder(), adder()
 	for i := 0; i < 10; i++ {
 		fmt.Println(
@@ -394,6 +394,14 @@ func Run_tour_3() {
 			neg(-2*i),
 		)
 	}
+
+	func adder() func(int) int {
+	sum := 0
+	return func(x int) int {
+		sum += x
+		return sum
+	}
+}
 
 	// revised version outputs
 	initialized new sum variable
@@ -450,9 +458,9 @@ func compute(fn func(float64, float64) float64) float64 {
 	return fn(3, 4)
 }
 
-type Vertex struct {
-	Lat, Long float64
-}
+// type Vertex struct {
+// 	Lat, Long float64
+// }
 
 /*
 	Behavior with methods with same name

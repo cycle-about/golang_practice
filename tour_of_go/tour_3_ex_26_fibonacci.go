@@ -23,8 +23,8 @@ TEMPLATE
 // a function that returns an int.
 func fibonacci() func() int {
 	seed_0 := 0
-	seed_1 := 2
-	nums := make([]int, 12)
+	seed_1 := 1
+	nums := make([]int, 11)
 	next_sum := 0
 	index := 0  // index in nums
 	return func() int {
