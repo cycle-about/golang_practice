@@ -36,12 +36,10 @@ Additional things to read - https://go.dev/doc/
 
 =====================================
 
-2/14/25
+3/30/25
 
-Continue exercise on page 18 of tour part 3
-Next question: how does the imported module run without args when method takes them?
-	Add print statements of those args
-	Read the docs on the module
+Resume at: ex 3.26 Fibonacci
+
 
 -----------------------------------
 
@@ -589,6 +587,15 @@ Tutorial 3. Getting started with multi-module workspaces
 	- go.wok has 'use' to specify which module to use as main during build
 	- Download a repo with a module, and modify it
 	- NOTE: 'workspace' seems like a built-in gradle for java
+
+-----------------------------------
+
+2/14/25
+
+Continue exercise on page 18 of tour part 3
+Next question: how does the imported module run without args when method takes them?
+	Add print statements of those args
+	Read the docs on the module
 
 -----------------------------------
 

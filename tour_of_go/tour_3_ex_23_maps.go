@@ -1,34 +1,35 @@
 // Run in Go browser sandbox to get test data
+// comment out to avoid name conflicts with main
 
 package main
 
-import (
-	"fmt"
-	"strings"
-	"golang.org/x/tour/wc"
-)
+// import (
+// 	"fmt"
+// 	"strings"
+// 	"golang.org/x/tour/wc"
+// )
 
-func WordCount(s string) map[string]int {
-	counts := make(map[string]int)
-	words := strings.Fields(s)
-	// fmt.Printf("Words are: %q", words)
-	for i := 0; i < len(words); i++ {
-		w := words[i]
-		count, found := counts[w]
-		fmt.Println("count:", count, "found:", found)
-		if !(found) {
-			counts[w] = 1
-		} else {
-			counts[w] = counts[w] + 1
-		}
-	}
-	return counts
-	//return map[string]int{"x": 1}
-}
+// func WordCount(s string) map[string]int {
+// 	counts := make(map[string]int)
+// 	words := strings.Fields(s)
+// 	// fmt.Printf("Words are: %q", words)
+// 	for i := 0; i < len(words); i++ {
+// 		w := words[i]
+// 		count, found := counts[w]
+// 		fmt.Println("count:", count, "found:", found)
+// 		if !(found) {
+// 			counts[w] = 1
+// 		} else {
+// 			counts[w] = counts[w] + 1
+// 		}
+// 	}
+// 	return counts
+// 	//return map[string]int{"x": 1}
+// }
 
-func main() {
-	wc.Test(WordCount)
-}
+// func main() {
+// 	wc.Test(WordCount)
+// }
 
 /*
 Words are: ["I" "am" "learning" "Go!"]count: 0 found: false

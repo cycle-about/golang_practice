@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	// "strings"
+	// "math"
 )
 
 // type Vertex struct {
@@ -312,7 +313,6 @@ func Run_tour_3() {
 		40.68433, -74.39967,
 	}
 	fmt.Println(m["Bell Labs"])  // {40.68433 -74.39967}
-	*/
 
 	// page 20. map literal, keys are required
 	// var m = map[string]Vertex{
@@ -354,7 +354,100 @@ func Run_tour_3() {
 	// v2, ok2 := m["Answer"]
 	// fmt.Println("The returned value:", v2, "Was the value found:", ok2)
 
-	// page 23. 
+	// page 23. maps exercise
+
+	// page 24. functional values
+	// functions can be assigned variable names, and passed as args
+	// assign function to variable
+	hypot := func(x, y float64) float64 {
+		return math.Sqrt(x*x + y*y)
+	}
+	fmt.Println(hypot(5, 12))
+
+	// pass value that's a function as an arg
+	fmt.Println(compute(hypot))
+	fmt.Println(compute(math.Pow))
+	*/
+
+	// page 25. function closures
+	/*
+	Go functions may be closures. A closure is a function value that references variables from outside its body. 
+	The function may access and assign to the referenced variables; in this sense the function is "bound" to the variables.
+	For example, the adder function returns a closure. Each closure is bound to its own sum variable. 
+	// original output
+		0 0
+		1 -2
+		3 -6
+		6 -12
+		10 -20
+		15 -30
+		21 -42
+		28 -56
+		36 -72
+		45 -90
+
+	// original calls
+	pos, neg := adder(), adder()
+	for i := 0; i < 10; i++ {
+		fmt.Println(
+			pos(i),
+			neg(-2*i),
+		)
+	}
+
+	// revised version outputs
+	initialized new sum variable
+	initialized new sum variable
+
+	i = 0
+	pos -> arg: 0, result: 0
+	neg -> arg: 0, result: 0
+
+	i = 1
+	pos -> arg: 1, result: 1
+	neg -> arg: -2, result: -2
+
+	i = 2
+	pos -> arg: 2, result: 3
+	neg -> arg: -4, result: -6
+
+	i = 3
+	pos -> arg: 3, result: 6
+	neg -> arg: -6, result: -12
+
+	i = 4
+	pos -> arg: 4, result: 10
+	neg -> arg: -8, result: -20
+
+	*/
+
+	// my revision to make progress more clear
+	pos, neg := adder(), adder()
+	for i := 0; i < 5; i++ {
+		fmt.Printf("\ni = %d\n", i)
+		fmt.Printf("pos -> ")
+		pos(i)
+		fmt.Printf("neg -> ")
+		neg(-2*i)
+	}
+}
+
+// returns a closure; each closure bound to its own sum variable
+func adder() func(int) int {
+	// initialize 'sum' once when the function variable is first created
+	fmt.Println("initialized new sum variable")
+	sum := 0  // each gets its own sum variable, looks like new instance made with each function call
+	// call this function each time the function is called with a new arg value
+	return func(x int) int {  // 
+		fmt.Printf("arg: %d, ", x)
+		sum += x
+		fmt.Printf("result: %d\n", sum)
+		return sum
+	}
+}
+
+func compute(fn func(float64, float64) float64) float64 {
+	return fn(3, 4)
 }
 
 type Vertex struct {
