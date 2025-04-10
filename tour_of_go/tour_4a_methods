@@ -1,3 +1,4 @@
+// change file name to avoid re-declaraion errors from 4b
 package main
 
 import (
@@ -102,9 +103,9 @@ func Run_tour_4() {
 	ScaleFuncValue(v4, 10)  // pass the struct
 	fmt.Println("AbsFunc(v) after: ", AbsFunc(v4))  // 5
 
-	// 6. Methods and pointer indirection
+	// 6-7. Methods and pointer indirection
 	
-	// a. functions must take pointer or value as declared
+	// 6-7.a. functions must take pointer or value as declared
     // var v5 Vertex  // created empty, initialize to show effects of function/methods
     v5 := Vertex{3, 4}
 	// ScaleFuncPoint(v5, 5) // cannot use v5 (variable of type Vertex) as *Vertex value
@@ -118,7 +119,7 @@ func Run_tour_4() {
     fmt.Println("p5 after:", p5)  // function that receives pointer DOES change v5
     // ScaleFuncValue(p5, 5) // cannot use p5 (variable of type *Vertex) as Vertex value
 
-	// b. methods with pointer receivers take either value OR pointer as receiver
+	// 6-7.b. methods with pointer receivers take either value OR pointer as receiver
 	// as a convenience, Go interprets the statement v.Scale(5) as (&v).Scale(5)
 	// since the Scale method has a pointer receiver
 	// all are allowed, though none 
@@ -140,4 +141,12 @@ func Run_tour_4() {
 	fmt.Println("\np6 before ScaleMethodValue:", v6)
 	p6.ScaleMethodValue(10) // OK
 	fmt.Println("p6 after:", p6)  // method uses value, gets pointer: DOES change v6
+
+	/* 
+	8. Choosing value or pointer receiver
+		Use pointer receiver when:
+			- method should modify value receiver points to
+			- don't want to copy the value with each call (especially if it's large)
+		Keep all methods on a given type either one or the other
+	*/
 }
