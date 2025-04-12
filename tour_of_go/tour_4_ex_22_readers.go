@@ -16,7 +16,7 @@ func (MyReader) Read(b []byte) (int, error) {
 	for i := range b {
         b[i] = 'A'
     }
-    // this ALWAYS uses the entire array, never reaches EOF, so 'bytes read' is always len of arg array
+    // this ALWAYS uses the entire array, never reaches EOF, so 'bytes read' is always same len as arg array
     return len(b), nil
 }
 

@@ -5,8 +5,8 @@ import (
 	"math"
 	"time"
 	// "strconv"
-	"io"
-	"strings"
+	// "io"
+	// "strings"
 )
 
 // interface type: a set of method signatures
@@ -292,7 +292,6 @@ func Run_tour_4() {
 	fmt.Println("Converted integer:", i)
 
 	// 20. Errors ex
-	*/
 
 	// 21. Readers
 	// read end of a stream of data; implementatinos for files, network connections, compressors, ciphers, etc
@@ -340,9 +339,8 @@ func Run_tour_4() {
 	// 	1 letter per 8 bytes indicates UTF-8 encoding
 	// 	Forgot that by defauts utf8 is used, not runes
 
-	// 22. Readers ex
+	// 22. Exercise: Readers
 
-	
-
-	// 23. 
+	// 23. Exercise: rot13Reader
+	*/
 }
