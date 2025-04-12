@@ -5,8 +5,8 @@ import (
 	"math"
 	"time"
 	// "strconv"
-	// "io"
-	// "strings"
+	"io"
+	"strings"
 )
 
 // interface type: a set of method signatures
@@ -292,6 +292,7 @@ func Run_tour_4() {
 	fmt.Println("Converted integer:", i)
 
 	// 20. Errors ex
+	*/
 
 	// 21. Readers
 	// read end of a stream of data; implementatinos for files, network connections, compressors, ciphers, etc
@@ -300,9 +301,11 @@ func Run_tour_4() {
 
 	r := strings.NewReader("Hello, Reader!")
 
+	// create slice of bytes with length 8
 	b := make([]byte, 8)  // consumes output 8 bytes at a time (so 2 runes)
 	for {
 		n, err := r.Read(b)
+		fmt.Printf("read %v bytes\n", n)  // added to confirm what return value means: how many bytes read, which may be LESS than size of input array
 		fmt.Printf("n = %v err = %v b = %v\n", n, err, b)
 		fmt.Printf("b[:n] = %q\n", b[:n])
 		if err == io.EOF {
@@ -339,7 +342,7 @@ func Run_tour_4() {
 
 	// 22. Readers ex
 
-	*/
+	
 
 	// 23. 
 }
