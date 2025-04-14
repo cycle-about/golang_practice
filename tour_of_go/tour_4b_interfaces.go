@@ -7,6 +7,7 @@ import (
 	// "strconv"
 	// "io"
 	// "strings"
+	// "image"
 )
 
 // interface type: a set of method signatures
@@ -342,5 +343,14 @@ func Run_tour_4() {
 	// 22. Exercise: Readers
 
 	// 23. Exercise: rot13Reader
+	
+	// 24. Images
+	m := image.NewRGBA(image.Rect(0, 0, 100, 100))
+	fmt.Println(m.Bounds())
+	fmt.Println(m.At(0, 0).RGBA())
+
+	// output:
+	// (0,0)-(100,100)
+	// 0 0 0 0
 	*/
 }

@@ -47,7 +47,12 @@ Finished Fibonacci
 That was the end of Tour of Go, Basics part c on Types (structs, slices, maps)
 
 Begin Tour of Go 4. Methods and Interfaces (http://127.0.0.1:3999/tour/methods/1)
-	
+	- Methods can be defined for particular types by adding a Receiver to the method
+		// function: Abs()
+		// Receiver: variable of type Vertex, named v
+		func (v Vertex) Abs() float64 {
+			return math.Sqrt(v.X*v.X + v.Y*v.Y)
+		}
 
 -----------------------------------
 
