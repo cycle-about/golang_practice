@@ -18,10 +18,10 @@
 Tour of Go Contents
 	Welcome - module installed for local runs 3/1/25
 	1. Basics a. Packages, Variables, and functions - finished 3/1/25
-	2. Basics b. Flow control statements: for, if, else, switch, and defer
+	2. Basics b. Flow control statements: for, if, else, switch, and defer - finished 3/2/25
 	3. Basics c. More types: structs, slices, and maps - finished 3/30/25
-	4. Methods and Interfaces
-	5. Generics
+	4. Methods and Interfaces - finished 4/13/25
+	5. Generics - finished 4/14/25
 	6. Concurrency
 
 ----------------------------------------
