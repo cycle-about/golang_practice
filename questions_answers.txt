@@ -1,3 +1,9 @@
+Questions:
+
+Concurrency page 2 on Channels: why does channel become locked if method not called from goroutine
+
+===================================
+
 You said: what are the major data structures in go language
 ChatGPT said:
 
