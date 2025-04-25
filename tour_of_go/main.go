@@ -14,6 +14,6 @@ func main() {
 	// tour_4_ex_rot13reader()
 	// tour_4_ex_image()
 	// Run_tour_5()
-	// Run_tour_6()
-	Run_tour_6_page_2()
+	Run_tour_6()
+	// Run_tour_6_page_2()
 }
