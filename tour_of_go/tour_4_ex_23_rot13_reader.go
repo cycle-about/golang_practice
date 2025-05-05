@@ -31,7 +31,6 @@ It returns an io.EOF error when the stream ends."
 func (rot13 rot13Reader) Read(b []byte) (int, error) {
 	reader_field := rot13.r
 	n, err := reader_field.Read(b)
-	// TODO substitute bytes in the array
 	for i := 0; i < n; i++ {
         b[i] = char_rot13(b[i])
     }

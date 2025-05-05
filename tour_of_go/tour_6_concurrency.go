@@ -196,8 +196,9 @@ func Run_tour_6() {
 Select statement lets goroutine wait on multiple communication operations
 Blocks until one of its cases can run, then executes that case
 If multiple are ready chooses one at random
-*/
 
+
+// orginal functions
 func fibonacci_6(c, quit chan int) {
 	x, y := 0, 1
 	for {
@@ -221,4 +222,153 @@ func Run_tour_6() {
 		quit <- 0
 	}()
 	fibonacci_6(c, quit)
+}
+
+
+// with print statements, comments, experiments
+func fibonacci_6(c, quit chan int) {
+	fmt.Println("in fibonacci_6()")
+	x, y := 0, 1
+	for {
+		// select blocks until one of its cases can run, then executes it
+		select {
+		case c <- x: 			// send_1 x to channel 'c'
+			fmt.Println("value of x is ", x)
+			x, y = y, x+y
+		case <-quit: 			// receive_2 from channel 'quit', without assigning value
+			fmt.Println("\nquit")
+			return
+		}
+	}
+}
+
+func Run_tour_6() {
+	fmt.Println("in main()")
+	c := make(chan int)      // unbuffered channel of ints
+	quit := make(chan int) 	 // also unbuffered channel of ints
+	// execute this funtion literal in a new goroutine
+	// must have another goroutine ready to receive from unbuffered channel before main goroutine sends to it
+	go func() {
+		for i := 0; i < 10; i++ {
+			fmt.Println("\nloop", i)
+			v := <-c			// receive from channel c, assign to v
+			fmt.Printf("received %d in channel c\n", v)
+		}
+		quit <- 0 				// send to channel 'quit'
+	}()
+	// main goroutine can start using the channels, after other goroutine is ready as send/receive counterpart
+	fibonacci_6(c, quit)  // this is on main thread, and prints right after "in main()"
+}
+*/
+
+////////////////////////////////////
+
+/*
+6. Default Selection
+default case in a select runs if no other case is ready
+
+Exercise: use a default case to try a send or receive without blocking
+	select {
+	case i := <-c:
+	    // use i
+	default:
+	    // receiving from c would block
+	}
+
+Guess about what this will do: print '.' every 50 ms, and print tick every 100 ms (so two . between tick), then after 5 ticks with dots, print boom
+It did that
+
+
+// original sample code
+func Run_tour_6() {
+	tick := time.Tick(100 * time.Millisecond)
+	fmt.Println(tick) 						// 0xc000134000
+	fmt.Printf("tick is type %T\n", tick) 	// tick is type <-chan time.Time
+	boom := time.After(500 * time.Millisecond)
+	for {
+		select {
+		case <-tick:
+			fmt.Println("tick.")
+		case <-boom:
+			fmt.Println("BOOM!")
+			return
+		default:
+			fmt.Println("    .")
+			time.Sleep(50 * time.Millisecond)
+		}
+	}
+}
+
+// Exercise: use a default case to try a send or receive without blocking
+// idea: try to receive from an empty buffer?
+
+func fibonacci_6(c, quit chan int) {
+	x, y := 0, 1
+	for {
+		select {
+		case c <- x:   			// sends to channel
+			fmt.Println("sent to channel c: ", x)
+			x, y = y, x+y
+		case <-quit: 			// never receives
+			fmt.Println("quit")
+			return
+		// without default: deadlock error from 'goroutine 1 [select]'
+		default:
+			// result: infinite loop
+			// fmt.Println("waiting")
+			
+			// result: "closing channels" panic: send on closed channel goroutine 1 [running]
+			// fmt.Println("closing channels")
+			// close(c)
+			// close(quit)
+
+			// result: does not do anything else, only "closing channel quit \n quit"
+			// strange: is calling close on a channel like reaching that case? somehow it prints quit
+			fmt.Println("closing channel quit")
+			close(quit)
+		}
+	}
+}
+
+func Run_tour_6() {
+	c := make(chan int)
+	quit := make(chan int)
+	go func() {
+		for i := 0; i < 10; i++ {
+			fmt.Println(<-c)  // receives 10 times from channel
+		}
+		// quit <- 0  // never send the condition that ends other goroutine
+	}()
+	// without the default that makes an infinite loop, both channels are closed when
+	// the other goroutine in function literal completes, because then there is no send/receive counterpart
+	fibonacci_6(c, quit)
+}
+
+// from chatgpt: non-blocking receive example
+// this does NOT create an infinite loop because there is only one goroutine, which ends
+// buffered channel can be used with only a single goroutine
+// result without the default: all goroutines are asleep - deadlock! goroutine 1 [chan receive]:
+func Run_tour_6() {
+	c := make(chan int, 1) // buffered channel, capacity 1
+    // No value sent yet, so c is empty
+    select {
+    case i := <-c:
+        fmt.Println("Received:", i)
+    // default:
+    //     fmt.Println("No value to receive (channel is empty)")
+    }
+}
+*/
+
+// my own non-blocking send example
+// result: "no other cases can run"
+func Run_tour_6() {
+	c := make(chan int, 1) // buffered channel, capacity 1
+	c <- 5  // goes into channel buffer, which is now full
+    select {
+    case c <- 3:
+        fmt.Println("sent to channel")
+    default:
+        fmt.Println("no other cases can run")
+    }
 }
