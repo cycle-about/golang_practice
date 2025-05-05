@@ -69,18 +69,50 @@ func Walk(t *tree.Tree, ch chan int) {
 }
 
 // Same determines whether the trees t1 and t2 contain the same values.
-// func Same(t1, t2 *tree.Tree) bool
+// ? how can same use Walk() or the channel if the channels are not global, and it doesn't get them as args
+//     chatgpt suggestion: have Same() create the channels
+func Same(t1, t2 *tree.Tree) bool {
+	ch1 := make(chan int)
+    ch2 := make(chan int)
 
-func Run_tour_6_ex_tree() {
-	fmt.Println("balanced binary tree")
-	ch := make(chan int, 10) // buffered channel, capacity 10
-	
-	go func() {
-        Walk(tree.New(2), ch)
-        close(ch) // Only close once, after Walk finishes
+    go func() {
+        Walk(t1, ch1)
+        close(ch1)
     }()
 
-	for val := range ch {
-    	fmt.Print(val, " ")
+    go func() {
+        Walk(t2, ch2)
+        close(ch2)
+    }()
+
+    for {
+        v1, ok1 := <-ch1
+        v2, ok2 := <-ch2
+
+        if ok1 != ok2 {
+            return false // one channel closed before the other
+        }
+        if !ok1 {
+            break // channels closed at same time
+        }
+        if v1 != v2 {
+            return false // values did not match
+        }
     }
+
+    return true
+}
+
+func Run_tour_6_ex_tree() {
+	fmt.Println("trees match: ", Same(tree.New(1), tree.New(2)))
+	// ch := make(chan int, 10) // buffered channel, capacity 10
+	
+	// go func() {
+    //     Walk(tree.New(2), ch)
+    //     close(ch) // Only close once, after Walk finishes
+    // }()
+
+	// for val := range ch {
+    // 	fmt.Print(val, " ")
+    // }
 }

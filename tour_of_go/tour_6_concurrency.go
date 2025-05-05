@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	// "time"
+	"time"
+	"sync"
 )
 
 /* 
@@ -358,7 +359,6 @@ func Run_tour_6() {
     //     fmt.Println("No value to receive (channel is empty)")
     }
 }
-*/
 
 // my own non-blocking send example
 // result: "no other cases can run"
@@ -371,4 +371,47 @@ func Run_tour_6() {
     default:
         fmt.Println("no other cases can run")
     }
+}
+*/
+
+////////////////////////////////////
+
+/*
+7. sync.Mutex
+Ensures only one goroutine can access a variable at a time
+Block of code can be defined to execute in mutual exclusion by surrouding with call to Lock and Unlock
+defer can also ensure mutex will be unlocked
+*/
+
+// SafeCounter is safe to use concurrently.
+type SafeCounter struct {
+	mu sync.Mutex
+	v  map[string]int
+}
+
+// Inc increments the counter for the given key.
+func (c *SafeCounter) Inc(key string) {
+	c.mu.Lock()
+	// Lock so only one goroutine at a time can access the map c.v.
+	c.v[key]++
+	c.mu.Unlock()
+}
+
+// Value returns the current value of the counter for the given key.
+func (c *SafeCounter) Value(key string) int {
+	c.mu.Lock()
+	// Lock so only one goroutine at a time can access the map c.v.
+	defer c.mu.Unlock()
+	return c.v[key]
+}
+
+func Run_tour_6() {
+	fmt.Println("in tour 6")
+	c := SafeCounter{v: make(map[string]int)}
+	for i := 0; i < 1000; i++ {
+		go c.Inc("somekey")
+	}
+
+	time.Sleep(time.Second)
+	fmt.Println(c.Value("somekey"))
 }

@@ -16,5 +16,6 @@ func main() {
 	// Run_tour_5()
 	// Run_tour_6()
 	// Run_tour_6_page_2()
-	Run_tour_6_ex_tree()
+	// Run_tour_6_ex_tree()
+	Run_tour_10_ex_crawler()
 }
