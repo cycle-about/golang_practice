@@ -383,13 +383,16 @@ Block of code can be defined to execute in mutual exclusion by surrouding with c
 defer can also ensure mutex will be unlocked
 */
 
-// SafeCounter is safe to use concurrently.
+// SafeCounter is safe to use concurrently
+// has a mutex field, which instances of this type can use
+// also has a map called v with where key is a string and value is an int
 type SafeCounter struct {
 	mu sync.Mutex
 	v  map[string]int
 }
 
 // Inc increments the counter for the given key.
+// calls lock and unlock on the SafeCounter's Mutex field, before changing SafeCounter's map
 func (c *SafeCounter) Inc(key string) {
 	c.mu.Lock()
 	// Lock so only one goroutine at a time can access the map c.v.

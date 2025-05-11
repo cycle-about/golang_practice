@@ -2,88 +2,87 @@ package main
 
 import (
 	"fmt"
+	"sync"
 )
 
 /*
-Exercise: 
+
+Exercise: Web Crawler
 In this exercise you'll use Go's concurrency features to parallelize a web crawler.
-
 Modify the Crawl function to fetch URLs in parallel without fetching the same URL twice.
+Hint: you can keep a cache of the URLs that have been fetched on a map, but maps alone are not safe for concurrent use!
 
-Hint: you can keep a cache of the URLs that have been fetched on a map, but maps alone are not safe for concurrent use! 
+*/
 
---------
+type Fetcher interface {
+	// Fetch returns the body of URL and
+	// a slice of URLs found on that page.
+	Fetch(url string) (body string, urls []string, err error)
+}
 
-ORIGINAL
-
-// Crawl uses fetcher to recursively crawl pages starting with url, to a maximum of depth
+// Crawl uses fetcher to recursively crawl
+// pages starting with url, to a maximum of depth.
 func Crawl(url string, depth int, fetcher Fetcher) {
-	// TODO: Fetch URLs in parallel.
-	// TODO: Don't fetch the same URL twice.
+	// TODO: Fetch URLs in parallel: goroutines
+	// TODO: Don't fetch the same URL twice: hint seems to imply a map of fetched urls, must be concurrent
 	// This implementation doesn't do either:
+	fmt.Printf("\nCRAWLING url: %s, depth: %d\n", url, depth)
 	if depth <= 0 {
 		return
 	}
+	val := globalMap.Value(url)
+	if (val > 0) {
+        return
+    }
 	body, urls, err := fetcher.Fetch(url)
+	globalMap.Inc(url)  // add to map of crawled items
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	fmt.Printf("found: %s %q\n", url, body)
+	fmt.Printf("    found: %s %q\n", url, body)
 	for _, u := range urls {
 		Crawl(u, depth-1, fetcher)
 	}
 	return
 }
 
+/*
+Current idea: make a structure with a mutex
+Question: why do the instructions say to track visited urls in a map, seems like slice would be sufficient?
 */
 
-
-type Fetcher interface {
-	// Fetch returns the body of URL and a slice of URLs found on that page.
-	Fetch(url string) (body string, urls []string, err error)
+// SafeMap is safe to use concurrently.
+type SafeMap struct {
+	mu sync.Mutex
+	v  map[string]int
 }
 
-// Crawl uses fetcher to recursively crawl pages starting with url, to a maximum of depth.
-func Crawl(url string, depth int, fetcher Fetcher) {
-	// TODO: Fetch URLs in parallel: make multiple goroutines, but calling one in the range ended after only one call
-	// TODO: Don't fetch the same URL twice
-	//     seems like add them to a mutex-controlled set, but if set declared in this method it gets over-written, and there are no args to pass a set,
-	//     or should goroutines use a channel
-	// This implementation doesn't do either
-	
-	fmt.Println("\nfetching: " + url)
-	if depth <= 0 {
-		return
-	}
-	body, urls, err := fetcher.Fetch(url)
-	if err != nil {
-		fmt.Println("    error: ", err)
-		return
-	}
-	fmt.Printf("    found urls: %s, and body: %q\n", urls, body)
-	for _, u := range urls {
-		if _, exists := set[u]; !exists {
-		    set[u] = struct{}{}
-		    fmt.Println("        added to set, crawling ",  u)
-		    Crawl(u, depth-1, fetcher)
-		} else {
-			fmt.Println("        already crawled ", u)
-		}
-	}
-
-	fmt.Println("unique urls: ", set)
-	return
+// Inc increments the counter for the given key.
+func (c *SafeMap) Inc(key string) {
+	c.mu.Lock()  // Lock so only one goroutine at a time can access the map c.v.
+	c.v[key]++
+	c.mu.Unlock()
 }
 
-set := make(map[string]struct{})
+// Value returns the current value for the given key.
+func (c *SafeMap) Value(key string) int {
+	c.mu.Lock()  // Lock so only one goroutine at a time can access the map c.v.
+	defer c.mu.Unlock()
+	val := c.v[key]
+	fmt.Println("    value in map:", val)
+	return val
+}
+
+// Declare a global variable
+var globalMap SafeMap
 
 func Run_tour_10_ex_crawler() {
-
-	Crawl("https://golang.org/", 4, fetcher)
+	globalMap = SafeMap{v: make(map[string]int)}
+	Crawl("https://golang.org/", 4, populatedFetcher)
+	// check at the end that urls were all only crawled (incremented) once
+	fmt.Println("\nFinal map:", globalMap)
 }
-
-// helper struct and methods
 
 // fakeFetcher is Fetcher that returns canned results.
 type fakeFetcher map[string]*fakeResult
@@ -101,7 +100,7 @@ func (f fakeFetcher) Fetch(url string) (string, []string, error) {
 }
 
 // fetcher is a populated fakeFetcher.
-var fetcher = fakeFetcher{
+var populatedFetcher = fakeFetcher{
 	"https://golang.org/": &fakeResult{
 		"The Go Programming Language",
 		[]string{
