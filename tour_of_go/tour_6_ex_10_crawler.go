@@ -22,10 +22,11 @@ type Fetcher interface {
 
 // Crawl uses fetcher to recursively crawl
 // pages starting with url, to a maximum of depth.
-func Crawl(url string, depth int, fetcher Fetcher) {
+func Crawl(url string, depth int, fetcher Fetcher, wg *sync.WaitGroup) {
 	// TODO: Fetch URLs in parallel: goroutines
 	// TODO: Don't fetch the same URL twice: hint seems to imply a map of fetched urls, must be concurrent
 	// This implementation doesn't do either:
+	defer wg.Done()
 	fmt.Printf("\nCRAWLING url: %s, depth: %d\n", url, depth)
 	if depth <= 0 {
 		return
@@ -42,7 +43,8 @@ func Crawl(url string, depth int, fetcher Fetcher) {
 	}
 	fmt.Printf("    found: %s %q\n", url, body)
 	for _, u := range urls {
-		Crawl(u, depth-1, fetcher)
+		wg.Add(1)
+		go Crawl(u, depth-1, fetcher, wg)
 	}
 	return
 }
@@ -78,9 +80,14 @@ func (c *SafeMap) Value(key string) int {
 var globalMap SafeMap
 
 func Run_tour_10_ex_crawler() {
+	var wg sync.WaitGroup
 	globalMap = SafeMap{v: make(map[string]int)}
-	Crawl("https://golang.org/", 4, populatedFetcher)
+	wg.Add(1)
+	go Crawl("https://golang.org/", 4, populatedFetcher, &wg)
+	wg.Add(1)
+	go Crawl("https://golang.org/pkg/os/", 4, populatedFetcher, &wg)
 	// check at the end that urls were all only crawled (incremented) once
+	wg.Wait() // Wait here for all goroutines to complete
 	fmt.Println("\nFinal map:", globalMap)
 }
 
